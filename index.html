@@ -225,8 +225,10 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background: radial-gradient(ellipse at top left, rgba(255,255,255,0.1) 0%, transparent 40%),
-                        radial-gradient(ellipse at bottom right, rgba(255,255,255,0.08) 0%, transparent 40%);
+            background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 1080"><!-- Solar panels --><g opacity="0.15"><rect x="100" y="600" width="80" height="80" fill="white" rx="5"/><rect x="190" y="600" width="80" height="80" fill="white" rx="5"/><rect x="280" y="600" width="80" height="80" fill="white" rx="5"/><rect x="100" y="690" width="80" height="80" fill="white" rx="5"/><rect x="190" y="690" width="80" height="80" fill="white" rx="5"/><rect x="280" y="690" width="80" height="80" fill="white" rx="5"/><rect x="100" y="780" width="80" height="80" fill="white" rx="5"/><rect x="190" y="780" width="80" height="80" fill="white" rx="5"/><rect x="280" y="780" width="80" height="80" fill="white" rx="5"/></g><!-- Wind turbine --><g opacity="0.12"><circle cx="960" cy="700" r="120" fill="none" stroke="white" stroke-width="3"/><path d="M960,580 L960,700 L1080,640" fill="none" stroke="white" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/><path d="M960,580 L960,700 L840,640" fill="none" stroke="white" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/><path d="M960,580 L960,700 L960,820" fill="none" stroke="white" stroke-width="4" stroke-linecap="round"/><rect x="950" y="820" width="20" height="100" fill="white"/></g><!-- Electrolyzer --><g opacity="0.1"><rect x="1500" y="650" width="300" height="200" fill="none" stroke="white" stroke-width="3" rx="10"/><rect x="1520" y="670" width="120" height="160" fill="white" opacity="0.5" rx="5"/><rect x="1660" y="670" width="120" height="160" fill="white" opacity="0.5" rx="5"/><circle cx="1580" cy="750" r="30" fill="none" stroke="white" stroke-width="2"/><circle cx="1720" cy="750" r="30" fill="none" stroke="white" stroke-width="2"/><text x="1580" y="760" font-family="Arial" font-size="24" fill="white" text-anchor="middle">H₂</text><text x="1720" y="760" font-family="Arial" font-size="24" fill="white" text-anchor="middle">O₂</text></g></svg>');
+            background-repeat: no-repeat;
+            background-position: center bottom;
+            background-size: cover;
             pointer-events: none;
         }
         
@@ -547,15 +549,18 @@
         }
         
         .card.solar-bg {
-            background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300"><defs><linearGradient id="solar" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:%2300A651;stop-opacity:0.1" /><stop offset="100%" style="stop-color:%2300D863;stop-opacity:0.05" /></linearGradient></defs><rect width="400" height="300" fill="url(%23solar)"/><rect x="50" y="50" width="60" height="60" fill="%2300A651" opacity="0.1" rx="5"/><rect x="120" y="50" width="60" height="60" fill="%2300A651" opacity="0.08" rx="5"/><rect x="190" y="50" width="60" height="60" fill="%2300A651" opacity="0.06" rx="5"/><rect x="260" y="50" width="60" height="60" fill="%2300A651" opacity="0.04" rx="5"/><rect x="50" y="120" width="60" height="60" fill="%2300A651" opacity="0.08" rx="5"/><rect x="120" y="120" width="60" height="60" fill="%2300A651" opacity="0.06" rx="5"/><rect x="190" y="120" width="60" height="60" fill="%2300A651" opacity="0.04" rx="5"/><rect x="260" y="120" width="60" height="60" fill="%2300A651" opacity="0.02" rx="5"/></svg>');
+            background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300"><defs><linearGradient id="solar" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:%2300A651;stop-opacity:0.2" /><stop offset="100%" style="stop-color:%2300D863;stop-opacity:0.1" /></linearGradient></defs><rect width="400" height="300" fill="url(%23solar)"/><rect x="50" y="50" width="60" height="60" fill="%2300A651" opacity="0.15" rx="5"/><rect x="120" y="50" width="60" height="60" fill="%2300A651" opacity="0.12" rx="5"/><rect x="190" y="50" width="60" height="60" fill="%2300A651" opacity="0.1" rx="5"/><rect x="260" y="50" width="60" height="60" fill="%2300A651" opacity="0.08" rx="5"/><rect x="50" y="120" width="60" height="60" fill="%2300A651" opacity="0.12" rx="5"/><rect x="120" y="120" width="60" height="60" fill="%2300A651" opacity="0.1" rx="5"/><rect x="190" y="120" width="60" height="60" fill="%2300A651" opacity="0.08" rx="5"/><rect x="260" y="120" width="60" height="60" fill="%2300A651" opacity="0.06" rx="5"/><rect x="50" y="190" width="60" height="60" fill="%2300A651" opacity="0.1" rx="5"/><rect x="120" y="190" width="60" height="60" fill="%2300A651" opacity="0.08" rx="5"/></svg>');
+            background-color: rgba(255, 255, 255, 0.92);
         }
         
         .card.wind-bg {
-            background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300"><defs><linearGradient id="wind" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:%2300D863;stop-opacity:0.08" /><stop offset="100%" style="stop-color:%2300A651;stop-opacity:0.05" /></linearGradient></defs><rect width="400" height="300" fill="url(%23wind)"/><circle cx="200" cy="150" r="80" fill="none" stroke="%2300A651" stroke-width="2" opacity="0.1"/><path d="M200,70 L200,150 L250,120" fill="none" stroke="%2300A651" stroke-width="3" opacity="0.15" stroke-linecap="round" stroke-linejoin="round"/><path d="M200,70 L200,150 L150,120" fill="none" stroke="%2300A651" stroke-width="3" opacity="0.15" stroke-linecap="round" stroke-linejoin="round"/><path d="M200,70 L200,150 L200,230" fill="none" stroke="%2300A651" stroke-width="3" opacity="0.15" stroke-linecap="round"/></svg>');
+            background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300"><defs><linearGradient id="wind" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:%2300D863;stop-opacity:0.15" /><stop offset="100%" style="stop-color:%2300A651;stop-opacity:0.1" /></linearGradient></defs><rect width="400" height="300" fill="url(%23wind)"/><circle cx="200" cy="150" r="80" fill="none" stroke="%2300A651" stroke-width="2" opacity="0.15"/><path d="M200,70 L200,150 L250,120" fill="none" stroke="%2300A651" stroke-width="3" opacity="0.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M200,70 L200,150 L150,120" fill="none" stroke="%2300A651" stroke-width="3" opacity="0.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M200,70 L200,150 L200,230" fill="none" stroke="%2300A651" stroke-width="3" opacity="0.2" stroke-linecap="round"/><circle cx="200" cy="150" r="8" fill="%2300A651" opacity="0.3"/></svg>');
+            background-color: rgba(255, 255, 255, 0.92);
         }
         
         .card.hydrogen-bg {
-            background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300"><defs><linearGradient id="h2" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:%2300A651;stop-opacity:0.05" /><stop offset="100%" style="stop-color:%2300D863;stop-opacity:0.1" /></linearGradient></defs><rect width="400" height="300" fill="url(%23h2)"/><circle cx="150" cy="100" r="30" fill="%2300A651" opacity="0.1"/><circle cx="250" cy="100" r="30" fill="%2300A651" opacity="0.08"/><path d="M150,100 L250,100" stroke="%2300A651" stroke-width="2" opacity="0.15"/><text x="150" y="105" font-family="Arial" font-size="20" fill="%2300A651" opacity="0.3" text-anchor="middle">H</text><text x="250" y="105" font-family="Arial" font-size="20" fill="%2300A651" opacity="0.3" text-anchor="middle">H</text><circle cx="200" cy="200" r="40" fill="%2300A651" opacity="0.05"/><text x="200" y="210" font-family="Arial" font-size="30" fill="%2300A651" opacity="0.2" text-anchor="middle">H₂</text></svg>');
+            background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300"><defs><linearGradient id="h2" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:%2300A651;stop-opacity:0.1" /><stop offset="100%" style="stop-color:%2300D863;stop-opacity:0.2" /></linearGradient></defs><rect width="400" height="300" fill="url(%23h2)"/><rect x="80" y="80" width="240" height="140" fill="none" stroke="%2300A651" stroke-width="2" opacity="0.15" rx="10"/><circle cx="150" cy="120" r="25" fill="%2300A651" opacity="0.15"/><circle cx="250" cy="120" r="25" fill="%2300A651" opacity="0.12"/><path d="M150,120 L250,120" stroke="%2300A651" stroke-width="2" opacity="0.2"/><text x="150" y="125" font-family="Arial" font-size="18" fill="%2300A651" opacity="0.4" text-anchor="middle">H</text><text x="250" y="125" font-family="Arial" font-size="18" fill="%2300A651" opacity="0.4" text-anchor="middle">H</text><circle cx="200" cy="180" r="35" fill="%2300A651" opacity="0.1"/><text x="200" y="190" font-family="Arial" font-size="24" fill="%2300A651" opacity="0.3" text-anchor="middle">H₂</text></svg>');
+            background-color: rgba(255, 255, 255, 0.92);
         }
         
         /* Stats Section */
@@ -1151,7 +1156,7 @@
                 <li><a href="#governance">Governance</a></li>
                 <li><a href="#industries">Industries</a></li>
                 <li><a href="#resources">Resources</a></li>
-                <li><a href="#contact" class="nav-cta">Get Started</a></li>
+                <li><a href="#contact" class="nav-cta">Get&nbsp;Started</a></li>
             </ul>
             <div class="mobile-menu-toggle" id="mobile-toggle">
                 <span></span>
@@ -1183,17 +1188,14 @@
             
             <div class="cards-grid">
                 <div class="card solar-bg animate-on-scroll">
-                    <div class="card-icon">📊</div>
                     <h3>Bankable Data</h3>
                     <p>ISO 17025 aligned reports to secure rapid project financing.</p>
                 </div>
                 <div class="card wind-bg animate-on-scroll">
-                    <div class="card-icon">⚡</div>
                     <h3>Multi-Tech Flexibility</h3>
                     <p>PEM, Alkaline, AEM & SOEC tested on uniform, high-spec test benches.</p>
                 </div>
                 <div class="card hydrogen-bg animate-on-scroll">
-                    <div class="card-icon">🌿</div>
                     <h3>Low-Cost Renewable Energy</h3>
                     <p>Direct OCP renewable supply at <40 €/MWh, ensuring green credentials and cost-efficiency.</p>
                 </div>
