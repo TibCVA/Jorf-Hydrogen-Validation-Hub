@@ -32,10 +32,118 @@
             --shadow-lg: 0 10px 15px rgba(0,0,0,0.1);
             --shadow-xl: 0 20px 25px rgba(0,0,0,0.1);
             --shadow-2xl: 0 25px 50px rgba(0,0,0,0.12);
+            --shadow-colored: 0 20px 40px rgba(0, 166, 81, 0.15);
             --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             --transition-slow: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            --transition-bounce: all 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
         }
         
+        /* Loading Screen */
+        .loader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--white);
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: opacity 0.5s ease, visibility 0.5s ease;
+        }
+        
+        .loader.hidden {
+            opacity: 0;
+            visibility: hidden;
+        }
+        
+        .loader-content {
+            text-align: center;
+        }
+        
+        .loader-logo {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 2rem;
+            position: relative;
+        }
+        
+        .loader-logo svg {
+            width: 100%;
+            height: 100%;
+            animation: pulse 1.5s ease-in-out infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.1); opacity: 0.8; }
+        }
+        
+        .loader-bar {
+            width: 200px;
+            height: 4px;
+            background: var(--gray-200);
+            border-radius: 2px;
+            overflow: hidden;
+            margin: 0 auto;
+        }
+        
+        .loader-progress {
+            height: 100%;
+            background: linear-gradient(90deg, var(--ocp-green), var(--ocp-green-light));
+            border-radius: 2px;
+            animation: loading 1.5s ease-in-out infinite;
+        }
+        
+        @keyframes loading {
+            0% { width: 0%; transform: translateX(0); }
+            50% { width: 70%; }
+            100% { width: 100%; transform: translateX(200px); }
+        }
+        
+        /* Custom Cursor */
+        body {
+            cursor: none;
+        }
+        
+        .cursor {
+            width: 10px;
+            height: 10px;
+            background: var(--ocp-green);
+            border-radius: 50%;
+            position: fixed;
+            pointer-events: none;
+            z-index: 9998;
+            transition: all 0.1s ease;
+            transform: translate(-50%, -50%);
+        }
+        
+        .cursor-follower {
+            width: 30px;
+            height: 30px;
+            border: 2px solid var(--ocp-green);
+            opacity: 0.3;
+            border-radius: 50%;
+            position: fixed;
+            pointer-events: none;
+            z-index: 9997;
+            transition: all 0.3s ease;
+            transform: translate(-50%, -50%);
+        }
+        
+        .cursor.hover {
+            width: 20px;
+            height: 20px;
+            background: var(--ocp-green);
+            opacity: 0.8;
+        }
+        
+        a, button, .clickable {
+            cursor: none;
+        }
+        
+        /* Enhanced Typography */
         * {
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
@@ -49,7 +157,6 @@
             overflow-x: hidden;
         }
         
-        /* Enhanced Typography System */
         h1 { 
             font-size: clamp(2.5rem, 5vw, 4.5rem); 
             font-weight: 800; 
@@ -82,12 +189,37 @@
             margin-bottom: 1.5rem;
         }
         
-        /* Premium Navigation */
+        /* Progress Indicator */
+        .progress-indicator {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: var(--gray-200);
+            z-index: 1001;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .progress-indicator.visible {
+            opacity: 1;
+        }
+        
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--ocp-green), var(--ocp-green-light));
+            width: 0%;
+            transition: width 0.3s ease;
+            box-shadow: 0 0 10px rgba(0, 166, 81, 0.5);
+        }
+        
+        /* Premium Navigation with Glass Effect */
         nav {
             position: fixed;
             top: 0;
             width: 100%;
-            background: rgba(255, 255, 255, 0.85);
+            background: rgba(255, 255, 255, 0.8);
             backdrop-filter: saturate(180%) blur(20px);
             -webkit-backdrop-filter: saturate(180%) blur(20px);
             z-index: 1000;
@@ -96,9 +228,9 @@
         }
         
         nav.scrolled {
-            background: rgba(255, 255, 255, 0.98);
-            border-bottom-color: var(--gray-200);
-            box-shadow: var(--shadow-lg);
+            background: rgba(255, 255, 255, 0.95);
+            border-bottom-color: rgba(0, 0, 0, 0.05);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
         }
         
         .nav-container {
@@ -120,6 +252,7 @@
             align-items: center;
             gap: 0.75rem;
             transition: var(--transition);
+            position: relative;
         }
         
         .nav-logo:hover {
@@ -129,6 +262,12 @@
         .nav-logo svg {
             width: 45px;
             height: 45px;
+            animation: logoFloat 6s ease-in-out infinite;
+        }
+        
+        @keyframes logoFloat {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-5px) rotate(5deg); }
         }
         
         nav ul {
@@ -155,7 +294,7 @@
             left: 0;
             width: 0;
             height: 2px;
-            background: var(--ocp-green);
+            background: linear-gradient(90deg, var(--ocp-green), var(--ocp-green-light));
             transition: width 0.3s ease;
         }
         
@@ -167,6 +306,14 @@
             width: 100%;
         }
         
+        nav a.active {
+            color: var(--ocp-green);
+        }
+        
+        nav a.active::after {
+            width: 100%;
+        }
+        
         .nav-cta {
             background: var(--ocp-green);
             color: white !important;
@@ -175,12 +322,34 @@
             font-weight: 600;
             box-shadow: 0 4px 14px rgba(0, 166, 81, 0.3);
             transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+            white-space: nowrap;
+            display: inline-block;
+        }
+        
+        .nav-cta::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.2);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s ease, height 0.6s ease;
         }
         
         .nav-cta:hover {
             background: var(--ocp-green-dark);
             transform: translateY(-2px);
             box-shadow: 0 6px 20px rgba(0, 166, 81, 0.4);
+        }
+        
+        .nav-cta:hover::before {
+            width: 300px;
+            height: 300px;
         }
         
         .nav-cta::after {
@@ -192,9 +361,11 @@
             display: none;
             flex-direction: column;
             gap: 5px;
-            cursor: pointer;
+            cursor: none;
             padding: 10px;
             margin-right: -10px;
+            position: relative;
+            z-index: 1002;
         }
         
         .mobile-menu-toggle span {
@@ -203,9 +374,22 @@
             background: var(--gray-700);
             transition: var(--transition);
             border-radius: 2px;
+            transform-origin: center;
         }
         
-        /* Hero Section with Background Image */
+        .mobile-menu-toggle.active span:nth-child(1) {
+            transform: rotate(45deg) translate(5px, 5px);
+        }
+        
+        .mobile-menu-toggle.active span:nth-child(2) {
+            opacity: 0;
+        }
+        
+        .mobile-menu-toggle.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(7px, -6px);
+        }
+        
+        /* Hero Section with Advanced Effects */
         .hero {
             min-height: 100vh;
             display: flex;
@@ -214,25 +398,58 @@
             position: relative;
             overflow: hidden;
             margin-top: 90px;
-            background: linear-gradient(135deg, rgba(0, 166, 81, 0.95) 0%, rgba(0, 200, 93, 0.95) 100%),
-                        url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 1080"><defs><filter id="blur"><feGaussianBlur stdDeviation="30"/></filter></defs><g filter="url(%23blur)"><rect x="0" y="0" width="1920" height="300" fill="%23ffffff" opacity="0.1"/><circle cx="300" cy="200" r="150" fill="%23ffffff" opacity="0.08"/><circle cx="1600" cy="800" r="200" fill="%23ffffff" opacity="0.06"/><path d="M0,540 Q480,440 960,540 T1920,540 L1920,1080 L0,1080 Z" fill="%23ffffff" opacity="0.05"/></g></svg>') center/cover;
+            background: linear-gradient(135deg, rgba(0, 166, 81, 0.95) 0%, rgba(0, 200, 93, 0.95) 100%);
         }
         
+        /* Mesh Gradient Background */
         .hero::before {
             content: '';
             position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 1080"><!-- Solar panels --><g opacity="0.15"><rect x="100" y="600" width="80" height="80" fill="white" rx="5"/><rect x="190" y="600" width="80" height="80" fill="white" rx="5"/><rect x="280" y="600" width="80" height="80" fill="white" rx="5"/><rect x="100" y="690" width="80" height="80" fill="white" rx="5"/><rect x="190" y="690" width="80" height="80" fill="white" rx="5"/><rect x="280" y="690" width="80" height="80" fill="white" rx="5"/><rect x="100" y="780" width="80" height="80" fill="white" rx="5"/><rect x="190" y="780" width="80" height="80" fill="white" rx="5"/><rect x="280" y="780" width="80" height="80" fill="white" rx="5"/></g><!-- Wind turbine --><g opacity="0.12"><circle cx="960" cy="700" r="120" fill="none" stroke="white" stroke-width="3"/><path d="M960,580 L960,700 L1080,640" fill="none" stroke="white" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/><path d="M960,580 L960,700 L840,640" fill="none" stroke="white" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/><path d="M960,580 L960,700 L960,820" fill="none" stroke="white" stroke-width="4" stroke-linecap="round"/><rect x="950" y="820" width="20" height="100" fill="white"/></g><!-- Electrolyzer --><g opacity="0.1"><rect x="1500" y="650" width="300" height="200" fill="none" stroke="white" stroke-width="3" rx="10"/><rect x="1520" y="670" width="120" height="160" fill="white" opacity="0.5" rx="5"/><rect x="1660" y="670" width="120" height="160" fill="white" opacity="0.5" rx="5"/><circle cx="1580" cy="750" r="30" fill="none" stroke="white" stroke-width="2"/><circle cx="1720" cy="750" r="30" fill="none" stroke="white" stroke-width="2"/><text x="1580" y="760" font-family="Arial" font-size="24" fill="white" text-anchor="middle">H₂</text><text x="1720" y="760" font-family="Arial" font-size="24" fill="white" text-anchor="middle">O₂</text></g></svg>');
-            background-repeat: no-repeat;
-            background-position: center bottom;
-            background-size: cover;
-            pointer-events: none;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle at 20% 80%, rgba(255,255,255,0.15) 0%, transparent 50%),
+                        radial-gradient(circle at 80% 20%, rgba(0,216,99,0.2) 0%, transparent 50%),
+                        radial-gradient(circle at 40% 40%, rgba(255,255,255,0.1) 0%, transparent 50%);
+            animation: meshMove 20s ease-in-out infinite;
         }
         
-        /* Animated Background Pattern */
+        @keyframes meshMove {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            33% { transform: translate(-30px, -50px) scale(1.1); }
+            66% { transform: translate(50px, -30px) scale(0.9); }
+        }
+        
+        /* Technology Graphics Layer */
+        .hero-graphics {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 40%;
+            pointer-events: none;
+            opacity: 0;
+            animation: fadeInUp 1s ease 0.5s forwards;
+        }
+        
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+        }
+        
+        .hero-graphics svg {
+            width: 100%;
+            height: 100%;
+        }
+        
+        /* Animated Grid Pattern */
         .hero::after {
             content: '';
             position: absolute;
@@ -241,14 +458,15 @@
             right: 0;
             bottom: 0;
             background-image: 
-                repeating-linear-gradient(45deg, transparent, transparent 35px, rgba(255,255,255,.02) 35px, rgba(255,255,255,.02) 70px);
-            animation: backgroundMove 20s linear infinite;
+                repeating-linear-gradient(0deg, transparent, transparent 100px, rgba(255,255,255,.03) 100px, rgba(255,255,255,.03) 101px),
+                repeating-linear-gradient(90deg, transparent, transparent 100px, rgba(255,255,255,.03) 100px, rgba(255,255,255,.03) 101px);
+            animation: gridMove 30s linear infinite;
             pointer-events: none;
         }
         
-        @keyframes backgroundMove {
+        @keyframes gridMove {
             0% { transform: translate(0, 0); }
-            100% { transform: translate(70px, 70px); }
+            100% { transform: translate(101px, 101px); }
         }
         
         .hero-content {
@@ -257,35 +475,38 @@
             z-index: 2;
             max-width: 1100px;
             padding: 0 3rem;
-            animation: heroEntry 1s ease-out;
-        }
-        
-        @keyframes heroEntry {
-            from {
-                opacity: 0;
-                transform: translateY(40px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+            position: relative;
         }
         
         .hero h1 {
             margin-bottom: 2rem;
             color: white;
             text-shadow: 0 4px 30px rgba(0,0,0,0.2);
+            opacity: 0;
+            animation: heroText 1s ease forwards;
+        }
+        
+        @keyframes heroText {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+            from {
+                opacity: 0;
+                transform: translateY(40px);
+            }
         }
         
         .hero .sub-headline {
             font-size: 1.5rem;
             font-weight: 400;
             margin-bottom: 3.5rem;
-            opacity: 0.95;
+            opacity: 0;
             max-width: 800px;
             margin-left: auto;
             margin-right: auto;
             line-height: 1.7;
+            animation: heroText 1s ease 0.2s forwards;
         }
         
         /* Premium CTA Buttons */
@@ -295,6 +516,8 @@
             justify-content: center;
             flex-wrap: wrap;
             margin-top: 2.5rem;
+            opacity: 0;
+            animation: heroText 1s ease 0.4s forwards;
         }
         
         .btn {
@@ -312,6 +535,7 @@
             z-index: 1;
             text-transform: none;
             letter-spacing: -0.01em;
+            cursor: none;
         }
         
         .btn::before {
@@ -338,7 +562,7 @@
         }
         
         .btn-primary:hover {
-            transform: translateY(-3px);
+            transform: translateY(-3px) scale(1.02);
             box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
         }
         
@@ -361,7 +585,7 @@
         .btn-secondary:hover {
             background: rgba(255, 255, 255, 0.15);
             border-color: white;
-            transform: translateY(-3px);
+            transform: translateY(-3px) scale(1.02);
             box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
         }
         
@@ -375,30 +599,101 @@
             content: '→';
             margin-left: 0.5rem;
             transition: transform 0.3s ease;
+            display: inline-block;
         }
         
         .btn:hover::after {
-            transform: translateX(4px);
+            transform: translateX(6px);
         }
         
-        /* Enhanced Sections */
+        /* Scroll Indicator */
+        .scroll-indicator {
+            position: absolute;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 2;
+            opacity: 0;
+            animation: fadeIn 1s ease 1s forwards;
+        }
+        
+        @keyframes fadeIn {
+            to { opacity: 1; }
+        }
+        
+        .scroll-indicator span {
+            display: block;
+            width: 24px;
+            height: 40px;
+            border: 2px solid rgba(255,255,255,0.8);
+            border-radius: 12px;
+            position: relative;
+            cursor: pointer;
+        }
+        
+        .scroll-indicator span::before {
+            content: '';
+            position: absolute;
+            top: 8px;
+            left: 50%;
+            width: 4px;
+            height: 8px;
+            background: white;
+            border-radius: 2px;
+            transform: translateX(-50%);
+            animation: scrollBounce 2s ease-in-out infinite;
+        }
+        
+        @keyframes scrollBounce {
+            0%, 100% { transform: translateX(-50%) translateY(0); }
+            50% { transform: translateX(-50%) translateY(10px); }
+        }
+        
+        /* Enhanced Sections with Parallax */
         .section {
             padding: 7rem 3rem;
             position: relative;
+            overflow: hidden;
         }
         
         .section:nth-child(even) {
             background: var(--gray-100);
         }
         
+        .section-bg-pattern {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0.03;
+            background-image: 
+                radial-gradient(circle at 1px 1px, var(--ocp-green) 1px, transparent 1px);
+            background-size: 50px 50px;
+            animation: patternMove 60s linear infinite;
+        }
+        
+        @keyframes patternMove {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(50px, 50px); }
+        }
+        
         .container {
             max-width: 1300px;
             margin: 0 auto;
+            position: relative;
+            z-index: 1;
         }
         
         .section-header {
             text-align: center;
             margin-bottom: 5rem;
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        
+        .section-header.visible {
+            animation: fadeInUp 0.8s ease forwards;
         }
         
         .section-header h2 {
@@ -412,11 +707,16 @@
             position: absolute;
             bottom: 0;
             left: 50%;
-            transform: translateX(-50%);
+            transform: translateX(-50%) scaleX(0);
             width: 100px;
             height: 4px;
             background: linear-gradient(90deg, var(--ocp-green), var(--ocp-green-light));
             border-radius: 2px;
+            transition: transform 0.5s ease 0.3s;
+        }
+        
+        .section-header.visible h2::after {
+            transform: translateX(-50%) scaleX(1);
         }
         
         .section-header h2 span {
@@ -458,18 +758,37 @@
             flex: 0 1 calc(33.333% - 1.67rem);
         }
         
-        /* Premium Card Design */
+        /* Premium Card Design with Glass Effect */
         .card {
-            background: white;
+            background: rgba(255, 255, 255, 0.95);
             border-radius: 24px;
             padding: 3rem;
             box-shadow: 0 4px 20px rgba(0,0,0,0.08);
             transition: var(--transition-slow);
             position: relative;
             overflow: hidden;
-            border: 1px solid var(--gray-200);
+            border: 1px solid rgba(0, 0, 0, 0.05);
             display: flex;
             flex-direction: column;
+            backdrop-filter: blur(10px);
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        
+        .card.visible {
+            animation: cardEntry 0.6s ease forwards;
+        }
+        
+        .card.visible:nth-child(1) { animation-delay: 0.1s; }
+        .card.visible:nth-child(2) { animation-delay: 0.2s; }
+        .card.visible:nth-child(3) { animation-delay: 0.3s; }
+        .card.visible:nth-child(4) { animation-delay: 0.4s; }
+        
+        @keyframes cardEntry {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
         
         .card::before {
@@ -486,51 +805,25 @@
         }
         
         .card:hover {
-            transform: translateY(-8px);
+            transform: translateY(-8px) scale(1.02);
             box-shadow: 0 12px 40px rgba(0,0,0,0.12);
             border-color: transparent;
+            background: rgba(255, 255, 255, 1);
         }
         
         .card:hover::before {
             transform: scaleX(1);
         }
         
-        .card-icon {
-            width: 70px;
-            height: 70px;
-            background: linear-gradient(135deg, var(--ocp-green), var(--ocp-green-light));
-            border-radius: 20px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 2rem;
-            font-size: 1.75rem;
-            color: white;
-            box-shadow: 0 8px 24px rgba(0, 166, 81, 0.25);
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .card-icon::after {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle, rgba(255,255,255,0.3) 0%, transparent 70%);
-            animation: iconShine 3s ease-in-out infinite;
-        }
-        
-        @keyframes iconShine {
-            0%, 100% { transform: translate(-50%, -50%) rotate(0deg); }
-            50% { transform: translate(-50%, -50%) rotate(180deg); }
-        }
-        
         .card h3 {
             color: var(--gray-900);
             margin-bottom: 1.25rem;
             font-size: 1.5rem;
+            transition: var(--transition);
+        }
+        
+        .card:hover h3 {
+            color: var(--ocp-green);
         }
         
         .card p {
@@ -540,30 +833,29 @@
             flex-grow: 1;
         }
         
-        /* Image Backgrounds for Cards */
-        .card.with-image {
-            background-size: cover;
-            background-position: center;
-            background-blend-mode: overlay;
-            background-color: rgba(255, 255, 255, 0.95);
-        }
-        
+        /* Enhanced Image Backgrounds */
         .card.solar-bg {
             background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300"><defs><linearGradient id="solar" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:%2300A651;stop-opacity:0.2" /><stop offset="100%" style="stop-color:%2300D863;stop-opacity:0.1" /></linearGradient></defs><rect width="400" height="300" fill="url(%23solar)"/><rect x="50" y="50" width="60" height="60" fill="%2300A651" opacity="0.15" rx="5"/><rect x="120" y="50" width="60" height="60" fill="%2300A651" opacity="0.12" rx="5"/><rect x="190" y="50" width="60" height="60" fill="%2300A651" opacity="0.1" rx="5"/><rect x="260" y="50" width="60" height="60" fill="%2300A651" opacity="0.08" rx="5"/><rect x="50" y="120" width="60" height="60" fill="%2300A651" opacity="0.12" rx="5"/><rect x="120" y="120" width="60" height="60" fill="%2300A651" opacity="0.1" rx="5"/><rect x="190" y="120" width="60" height="60" fill="%2300A651" opacity="0.08" rx="5"/><rect x="260" y="120" width="60" height="60" fill="%2300A651" opacity="0.06" rx="5"/><rect x="50" y="190" width="60" height="60" fill="%2300A651" opacity="0.1" rx="5"/><rect x="120" y="190" width="60" height="60" fill="%2300A651" opacity="0.08" rx="5"/></svg>');
             background-color: rgba(255, 255, 255, 0.92);
+            background-position: center;
+            background-size: cover;
         }
         
         .card.wind-bg {
             background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300"><defs><linearGradient id="wind" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:%2300D863;stop-opacity:0.15" /><stop offset="100%" style="stop-color:%2300A651;stop-opacity:0.1" /></linearGradient></defs><rect width="400" height="300" fill="url(%23wind)"/><circle cx="200" cy="150" r="80" fill="none" stroke="%2300A651" stroke-width="2" opacity="0.15"/><path d="M200,70 L200,150 L250,120" fill="none" stroke="%2300A651" stroke-width="3" opacity="0.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M200,70 L200,150 L150,120" fill="none" stroke="%2300A651" stroke-width="3" opacity="0.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M200,70 L200,150 L200,230" fill="none" stroke="%2300A651" stroke-width="3" opacity="0.2" stroke-linecap="round"/><circle cx="200" cy="150" r="8" fill="%2300A651" opacity="0.3"/></svg>');
             background-color: rgba(255, 255, 255, 0.92);
+            background-position: center;
+            background-size: cover;
         }
         
         .card.hydrogen-bg {
             background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300"><defs><linearGradient id="h2" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:%2300A651;stop-opacity:0.1" /><stop offset="100%" style="stop-color:%2300D863;stop-opacity:0.2" /></linearGradient></defs><rect width="400" height="300" fill="url(%23h2)"/><rect x="80" y="80" width="240" height="140" fill="none" stroke="%2300A651" stroke-width="2" opacity="0.15" rx="10"/><circle cx="150" cy="120" r="25" fill="%2300A651" opacity="0.15"/><circle cx="250" cy="120" r="25" fill="%2300A651" opacity="0.12"/><path d="M150,120 L250,120" stroke="%2300A651" stroke-width="2" opacity="0.2"/><text x="150" y="125" font-family="Arial" font-size="18" fill="%2300A651" opacity="0.4" text-anchor="middle">H</text><text x="250" y="125" font-family="Arial" font-size="18" fill="%2300A651" opacity="0.4" text-anchor="middle">H</text><circle cx="200" cy="180" r="35" fill="%2300A651" opacity="0.1"/><text x="200" y="190" font-family="Arial" font-size="24" fill="%2300A651" opacity="0.3" text-anchor="middle">H₂</text></svg>');
             background-color: rgba(255, 255, 255, 0.92);
+            background-position: center;
+            background-size: cover;
         }
         
-        /* Stats Section */
+        /* Animated Stats Section */
         .stats-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -580,6 +872,12 @@
             transition: var(--transition);
             position: relative;
             overflow: hidden;
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        
+        .stat-card.visible {
+            animation: cardEntry 0.6s ease forwards;
         }
         
         .stat-card::before {
@@ -592,6 +890,12 @@
             background: radial-gradient(circle, var(--ocp-green-ultra-light) 0%, transparent 70%);
             opacity: 0;
             transition: opacity 0.3s ease;
+            animation: statPulse 3s ease-in-out infinite;
+        }
+        
+        @keyframes statPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
         }
         
         .stat-card:hover::before {
@@ -599,7 +903,7 @@
         }
         
         .stat-card:hover {
-            transform: translateY(-5px);
+            transform: translateY(-5px) scale(1.02);
             box-shadow: 0 8px 30px rgba(0,0,0,0.12);
         }
         
@@ -612,6 +916,11 @@
             background-clip: text;
             line-height: 1;
             margin-bottom: 0.75rem;
+            display: inline-block;
+        }
+        
+        .stat-number.count-up {
+            display: inline-block;
         }
         
         .stat-label {
@@ -620,7 +929,7 @@
             font-weight: 500;
         }
         
-        /* Premium Tables */
+        /* Premium Tables with Hover Effects */
         .table-wrapper {
             background: white;
             border-radius: 20px;
@@ -628,11 +937,30 @@
             box-shadow: 0 4px 20px rgba(0,0,0,0.08);
             margin: 3rem 0;
             border: 1px solid var(--gray-200);
+            opacity: 0;
+            transform: translateY(30px);
+            overflow-x: auto;
+        }
+        
+        .table-wrapper.visible {
+            animation: fadeInUp 0.8s ease forwards;
+        }
+        
+        /* Reset table styles */
+        table * {
+            margin: 0;
+            padding: 0;
+            border: 0;
         }
         
         table {
             width: 100%;
             border-collapse: collapse;
+            border-spacing: 0;
+        }
+        
+        thead, tbody, tr, th, td {
+            display: revert;
         }
         
         th {
@@ -644,6 +972,25 @@
             text-transform: uppercase;
             font-size: 0.875rem;
             letter-spacing: 0.05em;
+            position: relative;
+            vertical-align: middle;
+            border: none;
+        }
+        
+        th::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--ocp-green), var(--ocp-green-light));
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+        
+        th:hover::after {
+            transform: scaleX(1);
         }
         
         td {
@@ -651,6 +998,9 @@
             border-bottom: 1px solid var(--gray-100);
             color: var(--gray-700);
             font-size: 1.05rem;
+            transition: var(--transition);
+            vertical-align: middle;
+            text-align: left;
         }
         
         td strong {
@@ -663,13 +1013,31 @@
         
         tr {
             transition: var(--transition);
+            position: relative;
         }
         
         tbody tr:hover {
             background: var(--ocp-green-ultra-light);
+            transform: translateX(5px);
         }
         
-        /* Trust Section */
+        tbody tr::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 4px;
+            background: var(--ocp-green);
+            transform: scaleY(0);
+            transition: transform 0.3s ease;
+        }
+        
+        tbody tr:hover::before {
+            transform: scaleY(1);
+        }
+        
+        /* Trust Section with Floating Animation */
         .trust-section {
             background: linear-gradient(135deg, var(--gray-100) 0%, rgba(0, 166, 81, 0.05) 100%);
             padding: 4rem 3rem;
@@ -678,6 +1046,7 @@
             text-align: center;
             position: relative;
             overflow: hidden;
+            box-shadow: inset 0 2px 10px rgba(0, 166, 81, 0.1);
         }
         
         .trust-section::before {
@@ -687,14 +1056,22 @@
             right: -100px;
             width: 300px;
             height: 300px;
-            background: radial-gradient(circle, rgba(0, 166, 81, 0.1) 0%, transparent 70%);
+            background: radial-gradient(circle, rgba(0, 166, 81, 0.15) 0%, transparent 70%);
             border-radius: 50%;
+            animation: float 10s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            50% { transform: translate(-30px, 30px) scale(1.1); }
         }
         
         .trust-section h3 {
             font-size: 1.5rem;
             color: var(--gray-800);
             margin-bottom: 2.5rem;
+            position: relative;
+            z-index: 1;
         }
         
         .trust-logos {
@@ -703,6 +1080,8 @@
             align-items: center;
             gap: 3rem;
             flex-wrap: wrap;
+            position: relative;
+            z-index: 1;
         }
         
         .trust-logo {
@@ -713,23 +1092,44 @@
             background: white;
             border-radius: 12px;
             box-shadow: 0 2px 10px rgba(0,0,0,0.06);
-            transition: var(--transition);
+            transition: var(--transition-bounce);
             border: 1px solid var(--gray-200);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .trust-logo::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: var(--ocp-green-ultra-light);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: all 0.5s ease;
         }
         
         .trust-logo:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 8px 25px rgba(0, 166, 81, 0.2);
             border-color: var(--ocp-green);
             color: var(--ocp-green);
         }
         
-        /* Persona Cards */
+        .trust-logo:hover::before {
+            width: 200px;
+            height: 200px;
+        }
+        
+        /* Persona Cards with 3D Effect */
         .persona-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
             gap: 2rem;
             margin: 5rem 0;
+            perspective: 1000px;
         }
         
         .persona-card {
@@ -746,6 +1146,13 @@
             display: flex;
             flex-direction: column;
             align-items: center;
+            transform-style: preserve-3d;
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        
+        .persona-card.visible {
+            animation: cardEntry 0.6s ease forwards;
         }
         
         .persona-card::before {
@@ -762,8 +1169,8 @@
         
         .persona-card:hover {
             border-color: var(--ocp-green);
-            transform: translateY(-5px);
-            box-shadow: 0 8px 30px rgba(0, 166, 81, 0.15);
+            transform: translateY(-5px) rotateX(-5deg);
+            box-shadow: 0 20px 40px rgba(0, 166, 81, 0.2);
         }
         
         .persona-card:hover::before {
@@ -786,7 +1193,7 @@
         }
         
         .persona-card:hover .persona-icon {
-            transform: scale(1.1);
+            transform: scale(1.1) rotateZ(360deg);
             background: linear-gradient(135deg, var(--ocp-green), var(--ocp-green-light));
             color: white;
             box-shadow: 0 8px 24px rgba(0, 166, 81, 0.3);
@@ -807,7 +1214,7 @@
             margin-bottom: 0;
         }
         
-        /* Enhanced Features List */
+        /* Enhanced Features List with Icons */
         .features-list {
             list-style: none;
             padding: 0;
@@ -821,6 +1228,12 @@
             font-size: 1.125rem;
             color: var(--gray-700);
             line-height: 1.7;
+            transition: var(--transition);
+        }
+        
+        .features-list li:hover {
+            color: var(--gray-900);
+            transform: translateX(5px);
         }
         
         .features-list li::before {
@@ -839,9 +1252,14 @@
             font-weight: bold;
             font-size: 1rem;
             box-shadow: 0 4px 12px rgba(0, 166, 81, 0.25);
+            transition: var(--transition);
         }
         
-        /* Contact Form */
+        .features-list li:hover::before {
+            transform: scale(1.2) rotate(360deg);
+        }
+        
+        /* Contact Form with Modern Design */
         .contact-form {
             background: white;
             border-radius: 30px;
@@ -850,10 +1268,30 @@
             max-width: 700px;
             margin: 0 auto;
             border: 1px solid var(--gray-200);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .contact-form::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, var(--ocp-green-ultra-light) 0%, transparent 70%);
+            animation: formPulse 10s ease-in-out infinite;
+        }
+        
+        @keyframes formPulse {
+            0%, 100% { transform: scale(1) rotate(0deg); }
+            50% { transform: scale(1.5) rotate(180deg); }
         }
         
         .form-group {
             margin-bottom: 2.5rem;
+            position: relative;
+            z-index: 1;
         }
         
         .form-group label {
@@ -862,6 +1300,7 @@
             font-weight: 600;
             color: var(--gray-800);
             font-size: 1.05rem;
+            transition: var(--transition);
         }
         
         .form-group input,
@@ -884,6 +1323,13 @@
             border-color: var(--ocp-green);
             background: white;
             box-shadow: 0 0 0 4px rgba(0, 166, 81, 0.1);
+            transform: translateY(-2px);
+        }
+        
+        .form-group input:focus + label,
+        .form-group select:focus + label,
+        .form-group textarea:focus + label {
+            color: var(--ocp-green);
         }
         
         .form-group textarea {
@@ -896,9 +1342,26 @@
             height: 1px;
             background: linear-gradient(90deg, transparent, var(--gray-300), transparent);
             margin: 6rem 0;
+            position: relative;
         }
         
-        /* Footer */
+        .section-separator::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 60px;
+            height: 60px;
+            background: white;
+            border: 1px solid var(--gray-300);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        /* Footer with Animated Elements */
         footer {
             background: linear-gradient(135deg, var(--gray-900) 0%, var(--dark) 100%);
             color: white;
@@ -924,10 +1387,28 @@
             100% { background-position: 200% 0; }
         }
         
+        footer::after {
+            content: '';
+            position: absolute;
+            bottom: -50%;
+            left: -25%;
+            width: 150%;
+            height: 150%;
+            background: radial-gradient(circle, rgba(0, 166, 81, 0.05) 0%, transparent 70%);
+            animation: footerFloat 20s ease-in-out infinite;
+        }
+        
+        @keyframes footerFloat {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            50% { transform: translate(50px, -50px) scale(1.2); }
+        }
+        
         .footer-content {
             max-width: 1300px;
             margin: 0 auto;
             text-align: center;
+            position: relative;
+            z-index: 1;
         }
         
         .footer-logo {
@@ -938,6 +1419,13 @@
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
+            display: inline-block;
+            animation: logoGlow 3s ease-in-out infinite;
+        }
+        
+        @keyframes logoGlow {
+            0%, 100% { filter: brightness(1); }
+            50% { filter: brightness(1.2); }
         }
         
         .footer-links {
@@ -963,12 +1451,13 @@
             left: 0;
             width: 0;
             height: 2px;
-            background: var(--ocp-green);
+            background: linear-gradient(90deg, var(--ocp-green), var(--ocp-green-light));
             transition: width 0.3s ease;
         }
         
         .footer-links a:hover {
             color: white;
+            transform: translateY(-2px);
         }
         
         .footer-links a:hover::after {
@@ -981,18 +1470,6 @@
             margin-top: 4rem;
             color: var(--gray-500);
             font-size: 0.95rem;
-        }
-        
-        /* Animations on Scroll */
-        .animate-on-scroll {
-            opacity: 0;
-            transform: translateY(30px);
-            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-        
-        .animate-on-scroll.visible {
-            opacity: 1;
-            transform: translateY(0);
         }
         
         /* Responsive Design */
@@ -1014,16 +1491,17 @@
             
             nav ul {
                 display: none;
-                position: absolute;
-                top: 100%;
+                position: fixed;
+                top: 70px;
                 left: 0;
                 right: 0;
-                background: white;
+                bottom: 0;
+                background: rgba(255, 255, 255, 0.98);
                 flex-direction: column;
                 padding: 2rem;
-                box-shadow: var(--shadow-xl);
                 gap: 1.5rem;
-                border-top: 1px solid var(--gray-200);
+                overflow-y: auto;
+                backdrop-filter: blur(20px);
             }
             
             nav ul.active {
@@ -1086,6 +1564,19 @@
             th, td {
                 padding: 1.25rem 1rem;
             }
+            
+            .cursor,
+            .cursor-follower {
+                display: none;
+            }
+            
+            body {
+                cursor: auto;
+            }
+            
+            a, button, .clickable {
+                cursor: pointer;
+            }
         }
         
         @media (max-width: 480px) {
@@ -1115,7 +1606,7 @@
         
         /* Print Styles */
         @media print {
-            nav, .cta-group, footer::before {
+            nav, .cta-group, footer::before, .loader, .cursor, .cursor-follower, .progress-indicator {
                 display: none;
             }
             
@@ -1131,6 +1622,36 @@
     </style>
 </head>
 <body>
+    <!-- Loading Screen -->
+    <div class="loader" id="loader">
+        <div class="loader-content">
+            <div class="loader-logo">
+                <svg viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg">
+                    <rect width="80" height="80" rx="20" fill="url(#loader-gradient)"/>
+                    <path d="M25 40h30M40 25v30" stroke="white" stroke-width="4" stroke-linecap="round"/>
+                    <defs>
+                        <linearGradient id="loader-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" style="stop-color:#00A651"/>
+                            <stop offset="100%" style="stop-color:#00D863"/>
+                        </linearGradient>
+                    </defs>
+                </svg>
+            </div>
+            <div class="loader-bar">
+                <div class="loader-progress"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Custom Cursor -->
+    <div class="cursor" id="cursor"></div>
+    <div class="cursor-follower" id="cursor-follower"></div>
+
+    <!-- Progress Indicator -->
+    <div class="progress-indicator" id="progress-indicator">
+        <div class="progress-bar" id="progress-bar"></div>
+    </div>
+
     <!-- Navigation -->
     <nav id="navbar">
         <div class="nav-container">
@@ -1148,14 +1669,14 @@
                 JHV Hub
             </a>
             <ul id="nav-menu">
-                <li><a href="#home">Home</a></li>
-                <li><a href="#why-jorf">Why Jorf Hub</a></li>
-                <li><a href="#services">Testing Services</a></li>
-                <li><a href="#specifications">Technical Specs</a></li>
-                <li><a href="#commercial">Commercial</a></li>
-                <li><a href="#governance">Governance</a></li>
-                <li><a href="#industries">Industries</a></li>
-                <li><a href="#resources">Resources</a></li>
+                <li><a href="#home" class="nav-link">Home</a></li>
+                <li><a href="#why-jorf" class="nav-link">Why Jorf Hub</a></li>
+                <li><a href="#services" class="nav-link">Testing Services</a></li>
+                <li><a href="#specifications" class="nav-link">Technical Specs</a></li>
+                <li><a href="#commercial" class="nav-link">Commercial</a></li>
+                <li><a href="#governance" class="nav-link">Governance</a></li>
+                <li><a href="#industries" class="nav-link">Industries</a></li>
+                <li><a href="#resources" class="nav-link">Resources</a></li>
                 <li><a href="#contact" class="nav-cta">Get&nbsp;Started</a></li>
             </ul>
             <div class="mobile-menu-toggle" id="mobile-toggle">
@@ -1168,40 +1689,84 @@
 
     <!-- Hero Section -->
     <section id="home" class="hero">
+        <div class="hero-graphics">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 400" preserveAspectRatio="none">
+                <!-- Solar panels -->
+                <g opacity="0.15">
+                    <rect x="100" y="200" width="80" height="80" fill="white" rx="5"/>
+                    <rect x="190" y="200" width="80" height="80" fill="white" rx="5"/>
+                    <rect x="280" y="200" width="80" height="80" fill="white" rx="5"/>
+                    <rect x="100" y="290" width="80" height="80" fill="white" rx="5"/>
+                    <rect x="190" y="290" width="80" height="80" fill="white" rx="5"/>
+                    <rect x="280" y="290" width="80" height="80" fill="white" rx="5"/>
+                    <line x1="100" y1="240" x2="360" y2="240" stroke="white" stroke-width="2" opacity="0.5"/>
+                    <line x1="100" y1="330" x2="360" y2="330" stroke="white" stroke-width="2" opacity="0.5"/>
+                    <line x1="140" y1="200" x2="140" y2="370" stroke="white" stroke-width="2" opacity="0.5"/>
+                    <line x1="230" y1="200" x2="230" y2="370" stroke="white" stroke-width="2" opacity="0.5"/>
+                    <line x1="320" y1="200" x2="320" y2="370" stroke="white" stroke-width="2" opacity="0.5"/>
+                </g>
+                <!-- Wind turbine -->
+                <g opacity="0.12">
+                    <circle cx="960" cy="280" r="100" fill="none" stroke="white" stroke-width="3"/>
+                    <path d="M960,180 L960,280 L1060,230" fill="none" stroke="white" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M960,180 L960,280 L860,230" fill="none" stroke="white" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M960,180 L960,280 L960,380" fill="none" stroke="white" stroke-width="4" stroke-linecap="round"/>
+                    <rect x="945" y="380" width="30" height="20" fill="white"/>
+                    <circle cx="960" cy="280" r="10" fill="white"/>
+                </g>
+                <!-- Electrolyzer -->
+                <g opacity="0.1">
+                    <rect x="1500" y="200" width="320" height="180" fill="none" stroke="white" stroke-width="3" rx="10"/>
+                    <rect x="1520" y="220" width="140" height="140" fill="white" opacity="0.5" rx="5"/>
+                    <rect x="1680" y="220" width="120" height="140" fill="white" opacity="0.5" rx="5"/>
+                    <circle cx="1590" cy="290" r="35" fill="none" stroke="white" stroke-width="2"/>
+                    <circle cx="1740" cy="290" r="35" fill="none" stroke="white" stroke-width="2"/>
+                    <text x="1590" y="300" font-family="Arial" font-size="28" fill="white" text-anchor="middle" font-weight="bold">H₂</text>
+                    <text x="1740" y="300" font-family="Arial" font-size="28" fill="white" text-anchor="middle" font-weight="bold">O₂</text>
+                    <path d="M1660 290 L1680 290" stroke="white" stroke-width="3"/>
+                    <path d="M1590 255 L1590 220" stroke="white" stroke-width="2" opacity="0.5"/>
+                    <path d="M1740 255 L1740 220" stroke="white" stroke-width="2" opacity="0.5"/>
+                </g>
+            </svg>
+        </div>
         <div class="hero-content">
-            <h1 class="animate-on-scroll">MW-Scale Electrolyser Testing.<br>Bankability. Independence. Results.</h1>
-            <p class="sub-headline animate-on-scroll">World's First Open-Access Multi-Tech Electrolyser Validation Hub.<br>10 MW available now, expanding to 50 MW by 2028.</p>
-            <div class="cta-group animate-on-scroll">
+            <h1>MW-Scale Electrolyser Testing.<br>Bankability. Independence. Results.</h1>
+            <p class="sub-headline">World's First Open-Access Multi-Tech Electrolyser Validation Hub.<br>10 MW available now, expanding to 50 MW by 2028.</p>
+            <div class="cta-group">
                 <a href="#contact" class="btn btn-primary">Request Technical Pack</a>
                 <a href="#contact" class="btn btn-secondary">Schedule Expert Call</a>
             </div>
+        </div>
+        <div class="scroll-indicator">
+            <span></span>
         </div>
     </section>
 
     <!-- Core Value Propositions -->
     <section class="section">
+        <div class="section-bg-pattern"></div>
         <div class="container">
-            <div class="section-header animate-on-scroll">
+            <div class="section-header">
                 <h2>Core <span>Value Propositions</span></h2>
                 <p>Advancing hydrogen projects with precision, reliability, and unmatched expertise</p>
             </div>
             
             <div class="cards-grid">
-                <div class="card solar-bg animate-on-scroll">
+                <div class="card solar-bg">
                     <h3>Bankable Data</h3>
                     <p>ISO 17025 aligned reports to secure rapid project financing.</p>
                 </div>
-                <div class="card wind-bg animate-on-scroll">
+                <div class="card wind-bg">
                     <h3>Multi-Tech Flexibility</h3>
                     <p>PEM, Alkaline, AEM & SOEC tested on uniform, high-spec test benches.</p>
                 </div>
-                <div class="card hydrogen-bg animate-on-scroll">
+                <div class="card hydrogen-bg">
                     <h3>Low-Cost Renewable Energy</h3>
                     <p>Direct OCP renewable supply at <40 €/MWh, ensuring green credentials and cost-efficiency.</p>
                 </div>
             </div>
             
-            <div class="trust-section animate-on-scroll">
+            <div class="trust-section">
                 <h3>Trusted by Industry Leaders</h3>
                 <div class="trust-logos">
                     <span class="trust-logo">Name 1</span>
@@ -1213,22 +1778,22 @@
             </div>
             
             <div class="persona-grid">
-                <a href="#industries" class="persona-card animate-on-scroll">
+                <a href="#industries" class="persona-card">
                     <div class="persona-icon">🏗️</div>
                     <h3>Project Developers</h3>
                     <p>Accelerate your hydrogen projects with bankable validation data</p>
                 </a>
-                <a href="#industries" class="persona-card animate-on-scroll">
+                <a href="#industries" class="persona-card">
                     <div class="persona-icon">⚙️</div>
                     <h3>EPC Contractors</h3>
                     <p>Validate integration specifications and reduce interface risks</p>
                 </a>
-                <a href="#industries" class="persona-card animate-on-scroll">
+                <a href="#industries" class="persona-card">
                     <div class="persona-icon">🏭</div>
                     <h3>OEMs</h3>
                     <p>Certify product performance with independent verification</p>
                 </a>
-                <a href="#industries" class="persona-card animate-on-scroll">
+                <a href="#industries" class="persona-card">
                     <div class="persona-icon">🔬</div>
                     <h3>Research & Institutions</h3>
                     <p>Access MW-scale testing for groundbreaking research</p>
@@ -1241,38 +1806,42 @@
 
     <!-- Why Jorf Hub -->
     <section id="why-jorf" class="section">
+        <div class="section-bg-pattern"></div>
         <div class="container">
-            <div class="section-header animate-on-scroll">
+            <div class="section-header">
                 <h2>Why <span>Jorf Hub</span></h2>
                 <p>The strategic choice for independent electrolyser validation at scale</p>
             </div>
             
-            <div class="stats-grid animate-on-scroll">
+            <div class="stats-grid">
                 <div class="stat-card">
-                    <div class="stat-number">15 MW</div>
+                    <div class="stat-number count-up" data-target="15">0</div>
+                    <div class="stat-unit" style="display: inline; font-size: 2rem; color: var(--ocp-green);"> MW</div>
                     <div class="stat-label">Global Independent Test Capacity</div>
                 </div>
                 <div class="stat-card">
-                    <div class="stat-number">>5 GW</div>
+                    <div class="stat-number count-up" data-target="5">0</div>
+                    <div class="stat-unit" style="display: inline; font-size: 2rem; color: var(--ocp-green);">+ GW</div>
                     <div class="stat-label">Planned MW-Scale Projects</div>
                 </div>
                 <div class="stat-card">
-                    <div class="stat-number">100+ MW</div>
+                    <div class="stat-number count-up" data-target="100">0</div>
+                    <div class="stat-unit" style="display: inline; font-size: 2rem; color: var(--ocp-green);">+ MW</div>
                     <div class="stat-label">Team Testing Experience</div>
                 </div>
                 <div class="stat-card">
-                    <div class="stat-number">2026</div>
+                    <div class="stat-number count-up" data-target="2026">2020</div>
                     <div class="stat-label">ISO 17025 Accreditation Target</div>
                 </div>
             </div>
             
             <div class="cards-grid four-items">
-                <div class="card animate-on-scroll">
+                <div class="card">
                     <h3>Addressing a Market Gap</h3>
                     <p>Only 15 MW of independent test capacity globally vs >5 GW planned >100 MW-scale projects (IEA, Global Hydrogen Outlook 2024).</p>
                 </div>
                 
-                <div class="card animate-on-scroll">
+                <div class="card">
                     <h3>Strategic Location & Infrastructure</h3>
                     <p>Situated within Jorf Lasfar Industrial Cluster:</p>
                     <ul class="features-list">
@@ -1282,7 +1851,7 @@
                     </ul>
                 </div>
                 
-                <div class="card animate-on-scroll">
+                <div class="card">
                     <h3>Unmatched Independence</h3>
                     <ul class="features-list">
                         <li>Fully independent SPV governance structure</li>
@@ -1290,7 +1859,7 @@
                     </ul>
                 </div>
                 
-                <div class="card animate-on-scroll">
+                <div class="card">
                     <h3>Proven Expertise & Track Record</h3>
                     <ul class="features-list">
                         <li>Team expertise: 100+ MW cumulative testing capacity developed internationally.</li>
@@ -1299,7 +1868,7 @@
                 </div>
             </div>
             
-            <div class="cta-group animate-on-scroll">
+            <div class="cta-group">
                 <a href="#contact" class="btn btn-primary">Download Detailed Capability Statement</a>
             </div>
         </div>
@@ -1309,54 +1878,56 @@
 
     <!-- Testing Services -->
     <section id="services" class="section">
+        <div class="section-bg-pattern"></div>
         <div class="container">
-            <div class="section-header animate-on-scroll">
+            <div class="section-header">
                 <h2>Testing <span>Services</span></h2>
                 <p>Our modular testing solutions provide precise, bankable results to advance your hydrogen projects.</p>
             </div>
             
-            <div class="table-wrapper animate-on-scroll">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Service Line</th>
-                            <th>Key Deliverables</th>
-                            <th>Duration</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td><strong>Performance & Dynamics</strong></td>
-                            <td>Efficiency mapping, load-ramp testing</td>
-                            <td>2-6 weeks</td>
-                        </tr>
-                        <tr>
-                            <td><strong>Durability & Lifetime</strong></td>
-                            <td>Long-term degradation assessment</td>
-                            <td>8-12 weeks</td>
-                        </tr>
-                        <tr>
-                            <td><strong>Compliance & Safety</strong></td>
-                            <td>ATEX compliance, grid stability validation</td>
-                            <td>1-4 weeks</td>
-                        </tr>
-                        <tr>
-                            <td><strong>Training & Demonstration</strong></td>
-                            <td>Operator certification & live demonstrations</td>
-                            <td>Tailored</td>
-                        </tr>
-                    </tbody>
-                </table>
+            <div class="table-wrapper">
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Service Line</th>
+                                <th>Key Deliverables</th>
+                                <th>Duration</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Performance & Dynamics</strong></td>
+                                <td>Efficiency mapping, load-ramp testing</td>
+                                <td>2-6 weeks</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Durability & Lifetime</strong></td>
+                                <td>Long-term degradation assessment</td>
+                                <td>8-12 weeks</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Compliance & Safety</strong></td>
+                                <td>ATEX compliance, grid stability validation</td>
+                                <td>1-4 weeks</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Training & Demonstration</strong></td>
+                                <td>Operator certification & live demonstrations</td>
+                                <td>Tailored</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
             
-            <div class="cta-group animate-on-scroll">
+            <div class="cta-group">
                 <a href="#services-detail" class="btn btn-primary">Explore Service Details</a>
             </div>
             
             <!-- Service Details -->
             <div id="services-detail" class="cards-grid four-items" style="margin-top: 5rem;">
-                <div class="card animate-on-scroll">
-                    <div class="card-icon">📈</div>
+                <div class="card">
                     <h3>Performance & Dynamics</h3>
                     <ul class="features-list">
                         <li>Load-response (0-100% ramp-up <5 sec PEM, <30 sec AWE)</li>
@@ -1365,8 +1936,7 @@
                     </ul>
                 </div>
                 
-                <div class="card animate-on-scroll">
-                    <div class="card-icon">⏱️</div>
+                <div class="card">
                     <h3>Durability & Lifetime</h3>
                     <ul class="features-list">
                         <li>DOE-H2NEW aligned endurance testing (up to 4,000 hours)</li>
@@ -1375,8 +1945,7 @@
                     </ul>
                 </div>
                 
-                <div class="card animate-on-scroll">
-                    <div class="card-icon">🛡️</div>
+                <div class="card">
                     <h3>Compliance & Safety</h3>
                     <ul class="features-list">
                         <li>ATEX Zone-1 rated facilities</li>
@@ -1385,8 +1954,7 @@
                     </ul>
                 </div>
                 
-                <div class="card animate-on-scroll">
-                    <div class="card-icon">🎓</div>
+                <div class="card">
                     <h3>Training & Demonstration</h3>
                     <ul class="features-list">
                         <li>On-site and virtual training sessions</li>
@@ -1402,36 +1970,33 @@
 
     <!-- Technical Specifications -->
     <section id="specifications" class="section">
+        <div class="section-bg-pattern"></div>
         <div class="container">
-            <div class="section-header animate-on-scroll">
+            <div class="section-header">
                 <h2>Technical <span>Specifications</span></h2>
                 <p>World-class infrastructure designed for precision and reliability</p>
             </div>
             
             <div class="cards-grid four-items">
-                <div class="card animate-on-scroll">
-                    <div class="card-icon">⚡</div>
+                <div class="card">
                     <h3>Power Infrastructure</h3>
                     <p>10 kV, 50 Hz, up to 3x5 MW modules (±1% accuracy)</p>
                 </div>
-                <div class="card animate-on-scroll">
-                    <div class="card-icon">💧</div>
+                <div class="card">
                     <h3>Cooling & Water Systems</h3>
                     <p>Thermal loops (±0.2 °C), RO + EDI purified water</p>
                 </div>
-                <div class="card animate-on-scroll">
-                    <div class="card-icon">🔬</div>
+                <div class="card">
                     <h3>Hydrogen Handling</h3>
                     <p>Pressure rated up to 30 bar(g), inline GC purity monitoring</p>
                 </div>
-                <div class="card animate-on-scroll">
-                    <div class="card-icon">📊</div>
+                <div class="card">
                     <h3>Data & Instrumentation</h3>
                     <p>High-frequency (1 kHz/channel), GDPR compliant, secure client API access</p>
                 </div>
             </div>
             
-            <div class="card animate-on-scroll" style="margin-top: 3rem;">
+            <div class="card" style="margin-top: 3rem;">
                 <h3>Technical Documentation Available</h3>
                 <ul class="features-list">
                     <li>Detailed single-line electrical diagram</li>
@@ -1446,13 +2011,14 @@
 
     <!-- Commercial Models -->
     <section id="commercial" class="section">
+        <div class="section-bg-pattern"></div>
         <div class="container">
-            <div class="section-header animate-on-scroll">
+            <div class="section-header">
                 <h2>Commercial <span>Models</span></h2>
                 <p>Transparent pricing and flexible access options tailored to your needs</p>
             </div>
             
-            <div class="table-wrapper animate-on-scroll">
+            <div class="table-wrapper">
                 <table>
                     <thead>
                         <tr>
@@ -1489,7 +2055,7 @@
                 </table>
             </div>
             
-            <div class="cta-group animate-on-scroll">
+            <div class="cta-group">
                 <a href="#contact" class="btn btn-primary">Request Tailored Offer</a>
             </div>
         </div>
@@ -1499,14 +2065,15 @@
 
     <!-- SPV & Governance -->
     <section id="governance" class="section">
+        <div class="section-bg-pattern"></div>
         <div class="container">
-            <div class="section-header animate-on-scroll">
+            <div class="section-header">
                 <h2>SPV & <span>Governance</span></h2>
                 <p>Transparent structure ensuring independence and operational excellence</p>
             </div>
             
             <div class="cards-grid">
-                <div class="card animate-on-scroll">
+                <div class="card">
                     <h3>SPV Legal Structure</h3>
                     <ul class="features-list">
                         <li>Moroccan registered Joint Venture</li>
@@ -1514,7 +2081,7 @@
                     </ul>
                 </div>
                 
-                <div class="card animate-on-scroll">
+                <div class="card">
                     <h3>Governance Highlights</h3>
                     <ul class="features-list">
                         <li>Independent operational oversight, transparent board governance</li>
@@ -1522,7 +2089,7 @@
                     </ul>
                 </div>
                 
-                <div class="card animate-on-scroll">
+                <div class="card">
                     <h3>Compliance & Risk Management</h3>
                     <ul class="features-list">
                         <li>Fully compliant with ISO 45001 (HSE) and ISO 17025 (laboratory competence)</li>
@@ -1532,7 +2099,7 @@
                 </div>
             </div>
             
-            <div class="cta-group animate-on-scroll">
+            <div class="cta-group">
                 <a href="#contact" class="btn btn-primary">Download Governance White Paper</a>
             </div>
         </div>
@@ -1542,36 +2109,33 @@
 
     <!-- Industries & Use Cases -->
     <section id="industries" class="section">
+        <div class="section-bg-pattern"></div>
         <div class="container">
-            <div class="section-header animate-on-scroll">
+            <div class="section-header">
                 <h2>Industries & <span>Use Cases</span></h2>
                 <p>Tailored solutions for every stakeholder in the hydrogen value chain</p>
             </div>
             
             <div class="cards-grid four-items">
-                <div class="card animate-on-scroll">
-                    <div class="card-icon">🏗️</div>
+                <div class="card">
                     <h3>Project Developers</h3>
                     <p>Rapid project finance approvals; bank-grade test results.</p>
                 </div>
-                <div class="card animate-on-scroll">
-                    <div class="card-icon">⚙️</div>
+                <div class="card">
                     <h3>EPC Contractors</h3>
                     <p>Reduced interface risks; validated EPC integration data.</p>
                 </div>
-                <div class="card animate-on-scroll">
-                    <div class="card-icon">🏭</div>
+                <div class="card">
                     <h3>OEMs</h3>
                     <p>Enhanced market credibility; independently verified product data.</p>
                 </div>
-                <div class="card animate-on-scroll">
-                    <div class="card-icon">🔬</div>
+                <div class="card">
                     <h3>Research & Academia</h3>
                     <p>Unique MW-scale test environment; acceleration of TRL from lab to market.</p>
                 </div>
             </div>
             
-            <div class="cta-group animate-on-scroll">
+            <div class="cta-group">
                 <a href="#contact" class="btn btn-primary">Speak with Our Specialists</a>
             </div>
         </div>
@@ -1581,14 +2145,15 @@
 
     <!-- Resources -->
     <section id="resources" class="section">
+        <div class="section-bg-pattern"></div>
         <div class="container">
-            <div class="section-header animate-on-scroll">
+            <div class="section-header">
                 <h2><span>Resources</span></h2>
                 <p>Comprehensive knowledge hub for hydrogen testing excellence</p>
             </div>
             
             <div class="cards-grid">
-                <div class="card animate-on-scroll">
+                <div class="card">
                     <h3>Available Resources</h3>
                     <ul class="features-list">
                         <li>White Papers & Reports</li>
@@ -1606,14 +2171,15 @@
 
     <!-- News & Insights -->
     <section id="news" class="section">
+        <div class="section-bg-pattern"></div>
         <div class="container">
-            <div class="section-header animate-on-scroll">
+            <div class="section-header">
                 <h2>News & <span>Insights</span></h2>
                 <p>Stay informed with the latest developments in hydrogen testing</p>
             </div>
             
             <div class="cards-grid">
-                <div class="card animate-on-scroll">
+                <div class="card">
                     <h3>Latest Updates</h3>
                     <ul class="features-list">
                         <li>Recent press releases</li>
@@ -1629,14 +2195,15 @@
 
     <!-- Client Portal -->
     <section id="portal" class="section">
+        <div class="section-bg-pattern"></div>
         <div class="container">
-            <div class="section-header animate-on-scroll">
+            <div class="section-header">
                 <h2>Client <span>Portal</span></h2>
                 <p>Secure, real-time access to your testing data and resources</p>
             </div>
             
             <div class="cards-grid">
-                <div class="card animate-on-scroll">
+                <div class="card">
                     <h3>Portal Features</h3>
                     <ul class="features-list">
                         <li>Secured data access (real-time testing dashboards, historical data archives)</li>
@@ -1652,13 +2219,14 @@
 
     <!-- Contact -->
     <section id="contact" class="section">
+        <div class="section-bg-pattern"></div>
         <div class="container">
-            <div class="section-header animate-on-scroll">
+            <div class="section-header">
                 <h2>Get <span>Started</span></h2>
                 <p>Connect with our experts to discuss your testing requirements</p>
             </div>
             
-            <div class="contact-form animate-on-scroll">
+            <div class="contact-form">
                 <form>
                     <div class="form-group">
                         <label for="name">Name</label>
@@ -1687,13 +2255,13 @@
                         <textarea id="message" name="message" rows="4" placeholder="Tell us about your testing requirements..."></textarea>
                     </div>
                     <div class="cta-group">
-                        <button type="submit" class="btn btn-primary" style="border: none; cursor: pointer;">Submit Request</button>
+                        <button type="submit" class="btn btn-primary" style="border: none; cursor: none;">Submit Request</button>
                     </div>
                 </form>
             </div>
             
             <div class="cards-grid" style="margin-top: 5rem;">
-                <div class="card animate-on-scroll">
+                <div class="card">
                     <h3>Other Ways to Connect</h3>
                     <ul class="features-list">
                         <li>Direct booking via Calendly (30-min expert calls)</li>
@@ -1723,6 +2291,67 @@
     </footer>
 
     <script>
+        // Loading Screen
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                document.getElementById('loader').classList.add('hidden');
+            }, 1500);
+        });
+
+        // Custom Cursor (Desktop only)
+        if (window.innerWidth > 768) {
+            const cursor = document.getElementById('cursor');
+            const cursorFollower = document.getElementById('cursor-follower');
+
+            document.addEventListener('mousemove', (e) => {
+                cursor.style.left = e.clientX + 'px';
+                cursor.style.top = e.clientY + 'px';
+                cursorFollower.style.left = e.clientX + 'px';
+                cursorFollower.style.top = e.clientY + 'px';
+            });
+
+            document.addEventListener('mouseenter', () => {
+                cursor.style.opacity = '1';
+                cursorFollower.style.opacity = '1';
+            });
+
+            document.addEventListener('mouseleave', () => {
+                cursor.style.opacity = '0';
+                cursorFollower.style.opacity = '0';
+            });
+
+            // Hover effects
+            const hoverElements = document.querySelectorAll('a, button, .clickable');
+            hoverElements.forEach(element => {
+                element.addEventListener('mouseenter', () => {
+                    cursor.classList.add('hover');
+                    cursorFollower.style.transform = 'translate(-50%, -50%) scale(1.5)';
+                });
+                element.addEventListener('mouseleave', () => {
+                    cursor.classList.remove('hover');
+                    cursorFollower.style.transform = 'translate(-50%, -50%) scale(1)';
+                });
+            });
+        }
+
+        // Progress Indicator
+        const progressIndicator = document.getElementById('progress-indicator');
+        const progressBar = document.getElementById('progress-bar');
+
+        window.addEventListener('scroll', () => {
+            const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+            const scrollHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            const scrollProgress = (scrollTop / scrollHeight) * 100;
+
+            if (scrollTop > 100) {
+                progressIndicator.classList.add('visible');
+            } else {
+                progressIndicator.classList.remove('visible');
+            }
+
+            progressBar.style.width = scrollProgress + '%';
+        });
+
         // Mobile Menu Toggle
         const mobileToggle = document.getElementById('mobile-toggle');
         const navMenu = document.getElementById('nav-menu');
@@ -1730,16 +2359,40 @@
         mobileToggle.addEventListener('click', () => {
             navMenu.classList.toggle('active');
             mobileToggle.classList.toggle('active');
+            document.body.style.overflow = navMenu.classList.contains('active') ? 'hidden' : '';
         });
         
-        // Navbar Scroll Effect
+        // Navbar Scroll Effect & Active Links
         const navbar = document.getElementById('navbar');
+        const navLinks = document.querySelectorAll('.nav-link');
+        const sections = document.querySelectorAll('section[id]');
+        
         window.addEventListener('scroll', () => {
-            if (window.scrollY > 100) {
+            const scrollY = window.pageYOffset;
+            
+            // Navbar background
+            if (scrollY > 100) {
                 navbar.classList.add('scrolled');
             } else {
                 navbar.classList.remove('scrolled');
             }
+            
+            // Active navigation
+            let current = '';
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                const sectionHeight = section.clientHeight;
+                if (scrollY >= sectionTop - 100) {
+                    current = section.getAttribute('id');
+                }
+            });
+            
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href').slice(1) === current) {
+                    link.classList.add('active');
+                }
+            });
         });
         
         // Smooth Scroll
@@ -1756,9 +2409,21 @@
                     // Close mobile menu if open
                     navMenu.classList.remove('active');
                     mobileToggle.classList.remove('active');
+                    document.body.style.overflow = '';
                 }
             });
         });
+        
+        // Scroll Indicator Click
+        const scrollIndicator = document.querySelector('.scroll-indicator');
+        if (scrollIndicator) {
+            scrollIndicator.addEventListener('click', () => {
+                window.scrollTo({
+                    top: window.innerHeight,
+                    behavior: 'smooth'
+                });
+            });
+        }
         
         // Intersection Observer for Animations
         const observerOptions = {
@@ -1770,32 +2435,116 @@
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
                     entry.target.classList.add('visible');
+                    
+                    // Count-up animation for stats
+                    if (entry.target.classList.contains('stat-card')) {
+                        const countUp = entry.target.querySelector('.count-up');
+                        if (countUp && !countUp.classList.contains('counted')) {
+                            countUp.classList.add('counted');
+                            const target = parseInt(countUp.getAttribute('data-target'));
+                            const duration = 2000;
+                            const step = target / (duration / 16);
+                            let current = 0;
+                            
+                            const timer = setInterval(() => {
+                                current += step;
+                                if (current >= target) {
+                                    current = target;
+                                    clearInterval(timer);
+                                }
+                                countUp.textContent = Math.floor(current);
+                            }, 16);
+                        }
+                    }
                 }
             });
         }, observerOptions);
         
-        document.querySelectorAll('.animate-on-scroll').forEach(el => {
+        // Observe all animatable elements
+        document.querySelectorAll('.section-header, .card, .stat-card, .table-wrapper, .persona-card, .trust-section').forEach(el => {
             observer.observe(el);
         });
         
-        // Form Submission
+        // Form Submission with Enhanced Feedback
         const form = document.querySelector('form');
         if (form) {
             form.addEventListener('submit', (e) => {
                 e.preventDefault();
                 const submitBtn = form.querySelector('button[type="submit"]');
                 const originalText = submitBtn.innerHTML;
-                submitBtn.innerHTML = 'Sending...';
+                
+                // Button animation
+                submitBtn.innerHTML = '<span style="display: inline-block; animation: spin 1s linear infinite;">⚡</span> Sending...';
                 submitBtn.disabled = true;
+                submitBtn.style.background = 'var(--gray-500)';
+                
+                // Form fields animation
+                const formGroups = form.querySelectorAll('.form-group');
+                formGroups.forEach((group, index) => {
+                    setTimeout(() => {
+                        group.style.transform = 'scale(0.98)';
+                        group.style.opacity = '0.7';
+                    }, index * 100);
+                });
                 
                 setTimeout(() => {
-                    alert('Thank you for your inquiry! We will contact you within 24 hours.');
-                    form.reset();
-                    submitBtn.innerHTML = originalText;
-                    submitBtn.disabled = false;
-                }, 1500);
+                    // Success state
+                    submitBtn.innerHTML = '✓ Success!';
+                    submitBtn.style.background = 'var(--ocp-green)';
+                    
+                    // Reset form
+                    setTimeout(() => {
+                        form.reset();
+                        submitBtn.innerHTML = originalText;
+                        submitBtn.disabled = false;
+                        submitBtn.style.background = '';
+                        
+                        formGroups.forEach(group => {
+                            group.style.transform = '';
+                            group.style.opacity = '';
+                        });
+                        
+                        // Success message
+                        alert('Thank you for your inquiry! We will contact you within 24 hours.');
+                    }, 1500);
+                }, 2000);
             });
         }
+        
+        // Add spin animation
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes spin {
+                0% { transform: rotate(0deg); }
+                100% { transform: rotate(360deg); }
+            }
+        `;
+        document.head.appendChild(style);
+        
+        // Parallax effect for hero graphics
+        window.addEventListener('scroll', () => {
+            const scrolled = window.pageYOffset;
+            const heroGraphics = document.querySelector('.hero-graphics');
+            if (heroGraphics && scrolled < window.innerHeight) {
+                heroGraphics.style.transform = `translateY(${scrolled * 0.3}px)`;
+            }
+        });
+        
+        // Enhanced hover effects for cards
+        const cards = document.querySelectorAll('.card');
+        cards.forEach(card => {
+            card.addEventListener('mouseenter', function(e) {
+                const rect = this.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                
+                this.style.background = `radial-gradient(circle at ${x}px ${y}px, rgba(0, 166, 81, 0.05) 0%, rgba(255, 255, 255, 0.95) 50%)`;
+            });
+            
+            card.addEventListener('mouseleave', function() {
+                this.style.background = '';
+            });
+        });
     </script>
 </body>
 </html>
